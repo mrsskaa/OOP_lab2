@@ -10,11 +10,11 @@ public:
     Polynomial();
     Polynomial(const double* coefficients, int degree);
     Polynomial(const Polynomial& other);
-    Polynomial(Polynomial&& other) noexcept;
+    Polynomial(Polynomial&& other);
     Polynomial& operator=(Polynomial other);
     ~Polynomial();
 
-    void swap(Polynomial& other) noexcept;
+    void swap(Polynomial& other);
     int degree() const;
     double operator[](std::size_t index) const;
     void trim();

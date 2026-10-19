@@ -10,8 +10,12 @@ namespace lab02 {
 
 Polynomial::Polynomial() = default;
 
-Polynomial::Polynomial(int degree)
-    : degree_(degree), coefficients_(degree >= 0 ? new double[static_cast<std::size_t>(degree) + 1]{} : nullptr) {}
+Polynomial::Polynomial(int degree) {
+    degree_ = degree;
+    if (degree >= 0) {
+        coefficients_ = new double[static_cast<std::size_t>(degree) + 1]{};
+    }
+}
 
 Polynomial::Polynomial(const double* coefficients, int degree) {
     if (degree < -1 || (degree >= 0 && coefficients == nullptr)) {
@@ -29,7 +33,7 @@ Polynomial::Polynomial(const double* coefficients, int degree) {
 
 Polynomial::Polynomial(const Polynomial& other) : Polynomial(other.coefficients_, other.degree_) {}
 
-Polynomial::Polynomial(Polynomial&& other) noexcept
+Polynomial::Polynomial(Polynomial&& other)
     : degree_(std::exchange(other.degree_, -1)), coefficients_(std::exchange(other.coefficients_, nullptr)) {}
 
 Polynomial& Polynomial::operator=(Polynomial other) {
@@ -41,7 +45,7 @@ Polynomial::~Polynomial() {
     delete[] coefficients_;
 }
 
-void Polynomial::swap(Polynomial& other) noexcept {
+void Polynomial::swap(Polynomial& other) {
     std::swap(degree_, other.degree_);
     std::swap(coefficients_, other.coefficients_);
 }
