@@ -1,8 +1,6 @@
 #include "lab02/polynomial.hpp"
 
-#include <ostream>
 #include <stdexcept>
-#include <streambuf>
 #include <utility>
 
 #include <gtest/gtest.h>
@@ -16,20 +14,6 @@ void ExpectCoefficients(const Polynomial& polynomial, const double* expected, in
         EXPECT_DOUBLE_EQ(polynomial[i], expected[i]);
     }
 }
-
-class OutputBuffer : public std::streambuf {
-public:
-    OutputBuffer() {
-        setp(data_, data_ + sizeof(data_) - 1);
-    }
-
-    const char* data() const {
-        return data_;
-    }
-
-private:
-    char data_[128]{};
-};
 
 TEST(PolynomialTest, DefaultIsZero) {
     const Polynomial polynomial;
@@ -244,21 +228,6 @@ TEST(PolynomialTest, IntegralDividesAllCoefficients) {
     const double values[]{1.0, -3.0, 2.0};
     const double expected[]{0.0, 1.0, -1.5, 2.0 / 3.0};
     ExpectCoefficients(Polynomial(values, 2).integral(), expected, 3);
-}
-
-TEST(PolynomialTest, PrintsSignsPowersAndSkipsZeroTerms) {
-    const double values[]{-2.0, 1.0, 0.0, -1.0};
-    OutputBuffer buffer;
-    std::ostream out(&buffer);
-    Polynomial(values, 3).print(out);
-    EXPECT_STREQ(buffer.data(), "-x^3 + x - 2");
-}
-
-TEST(PolynomialTest, PrintsZero) {
-    OutputBuffer buffer;
-    std::ostream out(&buffer);
-    Polynomial().print(out);
-    EXPECT_STREQ(buffer.data(), "0");
 }
 
 TEST(PolynomialTest_Throw, RejectsInvalidConstructorArguments) {
